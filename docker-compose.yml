@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: service-portal-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: service_portal
+      POSTGRES_USER: portal_user
+      POSTGRES_PASSWORD: portal_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - portal_pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+
+volumes:
+  portal_pgdata:
